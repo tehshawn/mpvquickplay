@@ -25,22 +25,36 @@ brew install mpv
 
 ## Installation
 
-### Option 1: Download Release
+### Option 1: Build from Source (Recommended)
+
+Due to macOS security restrictions, the app must be built locally to work properly. Pre-built releases may not be able to detect hotkeys on your Mac.
+
+**Requirements**: Xcode (free from App Store) and Command Line Tools
+
+```bash
+# Clone the repository
+git clone https://github.com/tehshawn/mkvquickplay.git
+cd mkvquickplay
+
+# Build the app
+cd macos
+xcodebuild -project MKVQuickPlay.xcodeproj -scheme MKVQuickPlay -configuration Release build
+
+# Copy to Applications
+cp -R ~/Library/Developer/Xcode/DerivedData/MKVQuickPlay-*/Build/Products/Release/MKVQuickPlay.app /Applications/
+
+# Launch
+open /Applications/MKVQuickPlay.app
+```
+
+### Option 2: Download Release (May Not Work)
+
+> **Note**: Pre-built releases may show "Hotkey Detection Failed" on macOS 26+ due to stricter security requirements for unsigned apps. If this happens, use Option 1 instead.
 
 1. Download the latest `MKVQuickPlay.app.zip` from [Releases](../../releases)
 2. Unzip and move `MKVQuickPlay.app` to `/Applications`
 3. Launch the app
-4. Grant **Accessibility** permission when prompted (required for hotkey detection)
-
-### Option 2: Build from Source
-
-```bash
-git clone https://github.com/YOUR_USERNAME/MKVQuickPlay.git
-cd MKVQuickPlay
-xcodebuild -project MKVQuickPlay.xcodeproj -scheme MKVQuickPlay -configuration Release build
-```
-
-The built app will be in `~/Library/Developer/Xcode/DerivedData/MKVQuickPlay-*/Build/Products/Release/`
+4. Grant **Accessibility** permission when prompted
 
 ## Usage
 
@@ -79,12 +93,16 @@ MKV QuickPlay requires two permissions:
 
 ## Troubleshooting
 
+### "Hotkey Detection Failed" alert
+This happens on macOS 26+ when running a pre-built (unsigned) app. **Solution**: Build from source using Option 1 above. When you build locally, macOS trusts the app.
+
 ### "mpv not found" alert
 Install mpv using `brew install mpv`
 
-### Hotkey not working
-1. Check that Accessibility permission is granted
-2. Ensure Finder is the active application when pressing the hotkey
+### Hotkey not working (no alert)
+1. Check that Accessibility permission is granted in System Settings > Privacy & Security > Accessibility
+2. Try removing MKV QuickPlay from the Accessibility list, quit the app, relaunch, and grant permission again
+3. Ensure Finder is the active application when pressing the hotkey
 
 ### No video plays
 Make sure a supported video file is selected in Finder (not just highlighted in a preview pane)
